@@ -25,7 +25,7 @@ def get_test_config() -> dict:
     config = configparser.RawConfigParser()
     config.read(CFG_PATH)
 
-    if not config.has_section('TEST'):
+    if not config.has_section(TESTING):
         create_test_section()
 
     else:
