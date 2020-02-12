@@ -2,9 +2,12 @@ __author__ = 'Ostico <ostico@gmail.com>'
 
 import os
 import sys
-from pyorient.exceptions import PyOrientConnectionException, \
-    PyOrientDatabaseException
+import logging
+import configparser
+
+from pyorient.exceptions import PyOrientConnectionException, PyOrientDatabaseException
 from pyorient.otypes import OrientRecordLink
+from pyorient.defaults import CFG_PATH, TESTING
 
 
 def is_debug_active():
@@ -75,7 +78,7 @@ def parse_cluster_id(cluster_id):
             cluster_id = cluster_id.decode("utf-8")
         elif isinstance( cluster_id, OrientRecordLink ):
             cluster_id = cluster_id.get()
-        elif sys.version_info[0] < 3 and isinstance( cluster_id, unicode ):
+        elif sys.version_info[0] < 3 and isinstance(cluster_id, unicode):
             cluster_id = cluster_id.encode('utf-8')
 
         _cluster_id, _position = cluster_id.split( ':' )
@@ -106,6 +109,57 @@ def parse_cluster_position(_cluster_position):
         # so treat it as one param
         _position = _cluster_position
     return _position
+
+
+def create_test_section() -> None:
+    """Creates the 'TESTING' section of the config file"""
+
+    test_db = input("Test server database [GratefulDeadConcerts]: ") or 'GratefulDeadConcerts'
+    test_uroot = input("Test server root user [root]: ") or 'root'
+    test_proot = input("Test server password: ")
+
+    while not test_proot:
+        input("No password was provided!\nTest server password: ")
+
+    test_server = input("Test server [localhost]: ") or 'localhost'
+    test_port = int(input("Test server port [2424]: ") or '2424')
+
+    write_to_config(TESTING, 'database', test_db)
+    write_to_config(TESTING, 'user', test_uroot)
+    write_to_config(TESTING, 'password', test_proot)
+    write_to_config(TESTING, 'server', test_server)
+    write_to_config(TESTING, 'port', test_port)
+
+
+def write_to_config(section: str, option: str, value: str) -> None:
+    """Write section, option and value to config file.
+
+    Parameters
+    ----------
+    section : str
+        Section name of configuration file.
+    option : str
+        Option name.
+    value : str
+        Option value.
+
+    """
+    cfp = CFG_PATH
+    config = configparser.RawConfigParser()
+
+    if not os.path.exists(cfp):
+        with open(cfp, 'w') as config_file:
+            config[section] = {option: value}
+            config.write(config_file)
+            logging.info('set in configuration file {} in section {} {}={}'.format(cfp, section, option, value))
+    else:
+        config.read(cfp)
+        if not config.has_section(section):
+            config.add_section(section)
+        config.set(section, option, value)
+        with open(cfp, 'w') as configfile:
+            config.write(configfile)
+
 
 if sys.version < '3':
     import codecs

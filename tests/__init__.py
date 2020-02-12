@@ -13,27 +13,30 @@
 #   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
-try:
-    import configparser
-except ImportError:
-    import ConfigParser as configparser
+
+import configparser
+
+from pyorient.defaults import CFG_PATH, TESTING
+from pyorient.utils import create_test_section
 
 
-def getTestConfig():
+def get_test_config() -> dict:
+    """Returns testing configuration parameters as a dictionary"""
     config = configparser.RawConfigParser()
-    config.read('tests.cfg')
+    config.read(CFG_PATH)
 
-    # getfloat() raises an exception if the value is not a float
-    # getint() and getboolean() also do this for their respective types
-    conf = {
-        'host': config.get('server', 'host'),
-        'port': config.get('server', 'port'),
-        'canroot': config.getboolean('server', 'canroot'),
-        'rootu': config.get('root', 'user'),
-        'rootp': config.get('root', 'pwd'),
-        'useru': config.get('user', 'user'),
-        'userp': config.get('user', 'pwd'),
-        'existing_db': config.get('db', 'existing'),
-        'new_db': config.get('db', 'new'),
-    }
+    if not config.has_section('TEST'):
+        create_test_section()
+
+    else:
+        conf = {
+            'server': config.get(TESTING, 'server'),
+            'port': config.get(TESTING, 'port'),
+            'rootu': config.get(TESTING, 'user'),
+            'rootp': config.get(TESTING, 'password'),
+            # 'useru': config.get('user', 'user'),
+            # 'userp': config.get('user', 'pwd'),
+            'database': config.get(TESTING, 'database'),
+        }
+
     return conf
