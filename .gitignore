@@ -1,43 +1,127 @@
-*.py[co]
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
 
-# Packages
-*.egg
-*.egg-info
-dist
-build
-eggs
-parts
-bin
-var
-sdist
-develop-eggs
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
 .installed.cfg
+*.egg
+
+# PyInstaller
+#  Usually these files are written by a python script from a template
+#  before PyInstaller builds the exe, so as to inject date/other infos into it.
+*.manifest
+*.spec
 
 # Installer logs
 pip-log.txt
+pip-delete-this-directory.txt
 
 # Unit test / coverage reports
+htmlcov/
+.tox/
 .coverage
-.tox
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
 
-#Translations
+# Translations
 *.mo
+*.pot
 
-#Mr Developer
-.mr.developer.cfg
+# Django stuff:
+*.log
+.static_storage/
+.media/
+local_settings.py
 
-*.swp
-*.so
-build/*
-docs/build
-.DS_Store
-._.DS_Store
-single.py
-singletest.py
-wiki
-.builddev
+# Flask stuff:
+instance/
+.webassets-cache
+
+# Scrapy stuff:
+.scrapy
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+target/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# pyenv
+.python-version
+
+# celery beat schedule file
+celerybeat-schedule
+
+# SageMath parsed files
+*.sage.py
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+
+# eclipse settings
+.settings
+.project
+.pydevproject
+
+# pychar
 .idea
-/ci/environment
-*.zip
-cover
-env
+.idea/bel_test_framework.iml
+.idea/inspectionProfiles/
+.idea/misc.xml
+.idea/modules.xml
+.idea/preferred-vcs.xml
+.idea/workspace.xml
+
+# imdone
+.imdone/
+
+# orientdb
+.orientdb_history
+
+# notebooks
+/notebooks/pics/algorithms
+/notebooks/Untitled*.ipynb
