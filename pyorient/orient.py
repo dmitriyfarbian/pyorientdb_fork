@@ -24,7 +24,8 @@ import select
 # Local imports
 from .serializations import OrientSerialization
 from .utils import dlog
-from .constants import SOCK_CONN_TIMEOUT, FIELD_SHORT, SUPPORTED_PROTOCOL, ERROR_ON_NEWER_PROTOCOL, MESSAGES
+from .constants import SOCK_CONN_TIMEOUT, FIELD_SHORT, SUPPORTED_PROTOCOL, ERROR_ON_NEWER_PROTOCOL, MESSAGES, \
+    STORAGE_TYPE_PLOCAL
 from .exceptions import PyOrientConnectionPoolException, PyOrientWrongProtocolVersionException,\
     PyOrientConnectionException, PyOrientBadMethodCallException
 
@@ -101,12 +102,16 @@ class OrientSocket(object):
         self.protocol = -1
         self.session_id = -1
 
-    def detect_server_disconnect(self, server_conn_timeout=SOCK_CONN_TIMEOUT):
+    def detect_server_disconnect(self,
+                                 rlist: list = [],
+                                 wlist: list = [],
+                                 elist: list = [],
+                                 server_conn_timeout=SOCK_CONN_TIMEOUT):
         # Trick to detect server disconnection to prevent this:
         # https://docs.python.org/2/howto/sockets.html#when-sockets-die
         try:
             # As soon as the connection crashes, this raises an exception
-            return select.select([], [self._socket], [self._socket], server_conn_timeout)
+            return select.select(rlist, wlist, elist, server_conn_timeout)
         except select.error as e:
             # Connection crash, try to shutdown connection gracefully
             self.connected = False
@@ -115,7 +120,9 @@ class OrientSocket(object):
 
     def write(self, buff):
         # Call method to detect server disconnect
-        _, ready_to_write, in_error = self.detect_server_disconnect(1)
+        _, ready_to_write, in_error = self.detect_server_disconnect(wlist=[self._socket],
+                                                                    elist=[self._socket],
+                                                                    server_conn_timeout=1)
 
         if not in_error and ready_to_write:
             # Socket works -> send all data
@@ -130,7 +137,9 @@ class OrientSocket(object):
     def read(self, _len_to_read):
         while True:
             # Call method to detect server disconnect
-            ready_to_read, _, in_error = self.detect_server_disconnect()
+            ready_to_read, _, in_error = self.detect_server_disconnect(rlist=[self._socket],
+                                                                       elist=[self._socket],
+                                                                       server_conn_timeout=30)
 
             if len(ready_to_read) > 0:
                 buf = bytearray(_len_to_read)
@@ -208,6 +217,15 @@ class OrientDB(object):
         # Re-generate dictionaries from clusters
         self._cluster_map = dict([(cluster.name, cluster.id) for cluster in self.clusters])
         self._cluster_reverse_map = dict([(cluster.id, cluster.name) for cluster in self.clusters])
+
+    def db_exists(self, name, db_type=STORAGE_TYPE_PLOCAL):
+        """Asks if a database exists in the OrientDB server instance.
+
+        :param name: the name of the database to create. Example: "MyDatabase".
+        :param db_type: the type of the database to create. Can be either document or graph. [default: DB_TYPE_DOCUMENT]
+        :return: bool
+        """
+        return self.get_message("DbExistsMessage").prepare((name, db_type)).send().fetch_response()
 
     def get_class_position(self, cluster_name):
         """
