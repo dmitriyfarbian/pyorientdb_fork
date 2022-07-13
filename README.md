@@ -1,10 +1,7 @@
 # pyorientdb
 
-**Master**   
+**State**   
 [![Build Status](https://travis-ci.org/mogui/pyorient.svg?branch=master)](https://travis-ci.org/mogui/pyorient) [![Coverage Status](https://coveralls.io/repos/mogui/pyorient/badge.svg?branch=master&service=github)](https://coveralls.io/github/mogui/pyorient?branch=master)
-
-**Develop**   
-[![Build Status](https://travis-ci.org/mogui/pyorient.svg?branch=develop)](https://travis-ci.org/mogui/pyorient) [![Coverage Status](https://coveralls.io/repos/mogui/pyorient/badge.svg?branch=develop&service=github)](https://coveralls.io/github/mogui/pyorient?branch=develop)
 
 [Orientdb](http://www.orientechnologies.com/) driver for python that uses the binary protocol.
 

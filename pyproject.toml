@@ -12,16 +12,16 @@ version = "1.0.0"
 description = "OrientDB native client library"
 authors = ["Bruce Schultz <bschultz013@gmail.com>"]
 maintainers = ["Bruce Schultz <bschultz013@gmail.com>"]
-license = "Apache 2.0"
+license = "Apache License 2.0"
 
 homepage = "https://github.com/brucetony/pyorientdb"
-#documentation = "https://aop2db.readthedocs.io/en/latest/"
+#documentation = "https://pyorient.readthedocs.io/en/latest/"
 readme = "README.md"
 
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Environment :: Console",
-    "License :: OSI Approved :: Apache 2.0 License",
+    "License :: OSI Approved :: Apache License 2.0",
     "Operating System :: OS Independent",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3.6",
@@ -35,10 +35,7 @@ packages = [
     { include = "pyorientdb", from="." },
 ]
 
-[tool.poetry.scripts]
-aop2db = "aop2db.cli:main"
-
 [tool.poetry.urls]
 "Issue Tracker" = "https://github.com/brucetony/pyorientdb/issues"
-#"Documentation" = "https://aop2db.readthedocs.io/en/latest/"
+#"Documentation" = "https://pyorient.readthedocs.io/en/latest/"
 "Source Code" = "https://github.com/brucetony/pyorientdb"
