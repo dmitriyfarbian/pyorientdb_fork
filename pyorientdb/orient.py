@@ -11,18 +11,18 @@ import socket
 import struct
 import select
 
-from .exceptions import PyOrientBadMethodCallException, \
+from pyorientdb.exceptions import PyOrientBadMethodCallException, \
     PyOrientConnectionException, PyOrientWrongProtocolVersionException, \
     PyOrientConnectionPoolException
 
-from .constants import FIELD_SHORT, \
+from pyorientdb.constants import FIELD_SHORT, \
     QUERY_ASYNC, QUERY_CMD, QUERY_GREMLIN, QUERY_SYNC, QUERY_SCRIPT, \
     SUPPORTED_PROTOCOL, DB_TYPE_DOCUMENT, \
     STORAGE_TYPE_PLOCAL, SOCK_CONN_TIMEOUT
 
-from .serializations import OrientSerialization
+from pyorientdb.serializations import OrientSerialization
 
-from .utils import dlog
+from pyorientdb.utils import dlog
 
 type_map = {'BOOLEAN': 0,
             'INTEGER': 1,
@@ -210,32 +210,32 @@ class OrientDB(object):
 
     _Messages = dict(
         # Server
-        ConnectMessage="pyorient.messages.database",
-        ShutdownMessage="pyorient.messages.connection",
+        ConnectMessage="pyorientdb.messages.database",
+        ShutdownMessage="pyorientdb.messages.connection",
 
-        DbOpenMessage="pyorient.messages.database",
-        DbCloseMessage="pyorient.messages.database",
-        DbExistsMessage="pyorient.messages.database",
-        DbCreateMessage="pyorient.messages.database",
-        DbDropMessage="pyorient.messages.database",
-        DbCountRecordsMessage="pyorient.messages.database",
-        DbReloadMessage="pyorient.messages.database",
-        DbSizeMessage="pyorient.messages.database",
-        DbListMessage="pyorient.messages.database",
+        DbOpenMessage="pyorientdb.messages.database",
+        DbCloseMessage="pyorientdb.messages.database",
+        DbExistsMessage="pyorientdb.messages.database",
+        DbCreateMessage="pyorientdb.messages.database",
+        DbDropMessage="pyorientdb.messages.database",
+        DbCountRecordsMessage="pyorientdb.messages.database",
+        DbReloadMessage="pyorientdb.messages.database",
+        DbSizeMessage="pyorientdb.messages.database",
+        DbListMessage="pyorientdb.messages.database",
 
         # Cluster
-        DataClusterAddMessage="pyorient.messages.cluster",
-        DataClusterCountMessage="pyorient.messages.cluster",
-        DataClusterDataRangeMessage="pyorient.messages.cluster",
-        DataClusterDropMessage="pyorient.messages.cluster",
+        DataClusterAddMessage="pyorientdb.messages.cluster",
+        DataClusterCountMessage="pyorientdb.messages.cluster",
+        DataClusterDataRangeMessage="pyorientdb.messages.cluster",
+        DataClusterDropMessage="pyorientdb.messages.cluster",
 
-        RecordCreateMessage="pyorient.messages.records",
-        RecordDeleteMessage="pyorient.messages.records",
-        RecordLoadMessage="pyorient.messages.records",
-        RecordUpdateMessage="pyorient.messages.records",
+        RecordCreateMessage="pyorientdb.messages.records",
+        RecordDeleteMessage="pyorientdb.messages.records",
+        RecordLoadMessage="pyorientdb.messages.records",
+        RecordUpdateMessage="pyorientdb.messages.records",
 
-        CommandMessage="pyorient.messages.commands",
-        TxCommitMessage="pyorient.messages.commands",
+        CommandMessage="pyorientdb.messages.commands",
+        TxCommitMessage="pyorientdb.messages.commands",
     )
 
     def __init__(self,

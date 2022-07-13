@@ -4,16 +4,11 @@ import unittest
 import os
 import sys
 
-os.environ['DEBUG'] = "1"
-os.environ['DEBUG_VERBOSE'] = "0"
-# if os.path.realpath('../') not in sys.path:
-#     sys.path.insert(0, os.path.realpath('../'))
-#
-# if os.path.realpath('.') not in sys.path:
-#     sys.path.insert(0, os.path.realpath('.'))
-
 import pyorientdb
 
+
+os.environ['DEBUG'] = "1"
+os.environ['DEBUG_VERBOSE'] = "0"
 
 class CommandTestCase(unittest.TestCase):
     """ Command Test Case """
@@ -55,7 +50,7 @@ class CommandTestCase(unittest.TestCase):
 
         try:
             create_class = factory.get_message(pyorientdb.COMMAND)
-            """:type create_class: pyorient.Messages.Database.CommandMessage"""
+            """:type create_class: pyorientdb.Messages.Database.CommandMessage"""
             create_class.prepare((pyorientdb.QUERY_CMD, "create class demo_class")) \
                 .send().fetch_response()
             clusters = factory.get_message(pyorientdb.DB_RELOAD).prepare() \

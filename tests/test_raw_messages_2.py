@@ -21,7 +21,7 @@ if os.path.realpath('.') not in sys.path:
     sys.path.insert(0, os.path.realpath('.'))
 
 
-class RawMessages_2_TestCase(unittest.TestCase):
+class RawMessages2TestCase(unittest.TestCase):
     """ Command Test Case """
 
     def test_record_object(self):
@@ -101,7 +101,7 @@ class RawMessages_2_TestCase(unittest.TestCase):
         count_msg = DbCountRecordsMessage(connection)
         res = count_msg.prepare().send().fetch_response()
 
-        assert res is not 0
+        assert res != 0
         assert res > 0
 
     def test_record_create_update(self):
@@ -305,21 +305,21 @@ class RawMessages_2_TestCase(unittest.TestCase):
         res1 = count_msg.set_count_tombstones(1) \
             .prepare([(0, 1, 2, 3, 4, 5)]).send().fetch_response()
 
-        assert res1 is not 0
+        assert res1 != 0
         assert res1 > 0
 
         count_msg = DataClusterCountMessage(connection)
         res2 = count_msg.set_count_tombstones(1) \
             .prepare([(0, 1, 2, 3, 4, 5), 1]).send().fetch_response()
 
-        assert res2 is not 0
+        assert res2 != 0
         assert res2 > 0
 
         count_msg = DataClusterCountMessage(connection)
         res3 = count_msg.set_count_tombstones(1).set_cluster_ids((0, 1, 2, 3, 4, 5)) \
             .prepare().send().fetch_response()
 
-        assert res3 is not 0
+        assert res3 != 0
         assert res3 > 0
 
         assert res1 == res2
