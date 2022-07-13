@@ -8,7 +8,7 @@ import os
 os.environ['DEBUG'] = "0"
 os.environ['DEBUG_VERBOSE'] = "0"
 
-import pyorient
+import pyorientdb
 
 
 class CommandTestCase(unittest.TestCase):
@@ -18,20 +18,20 @@ class CommandTestCase(unittest.TestCase):
 
     def setUp(self):
 
-        self.client = pyorient.OrientDB("localhost", 2424)
+        self.client = pyorientdb.OrientDB("localhost", 2424)
         self.client.connect("root", "root")
 
         db_name = "test_tr"
         try:
             self.client.db_drop(db_name)
-        except pyorient.PyOrientCommandException as e:
+        except pyorientdb.PyOrientCommandException as e:
             print(e)
         finally:
-            db = self.client.db_create(db_name, pyorient.DB_TYPE_GRAPH,
-                                       pyorient.STORAGE_TYPE_MEMORY)
+            db = self.client.db_create(db_name, pyorientdb.DB_TYPE_GRAPH,
+                                       pyorientdb.STORAGE_TYPE_MEMORY)
 
         self.cluster_info = self.client.db_open(
-            db_name, "admin", "admin", pyorient.DB_TYPE_GRAPH, ""
+            db_name, "admin", "admin", pyorientdb.DB_TYPE_GRAPH, ""
         )
 
     def test_reserved_words(self):
@@ -51,11 +51,11 @@ class CommandTestCase(unittest.TestCase):
 
         # print (res[0]._in)
         assert isinstance(res[0]._in,
-                          pyorient.OrientRecordLink)
+                          pyorientdb.OrientRecordLink)
         assert res[0]._in.get_hash() == rec_position2._rid
 
         # print (res[0]._out)
-        assert isinstance(res[0]._out, pyorient.OrientRecordLink)
+        assert isinstance(res[0]._out, pyorientdb.OrientRecordLink)
         assert res[0]._out.get_hash() == rec_position1._rid
 
         result = self.client.query(
@@ -134,12 +134,12 @@ class CommandTestCase(unittest.TestCase):
         # print( cluster_id[0] )
         # print (cluster_id[0]._in)
         assert isinstance(edge_result[0]._in,
-                          pyorient.OrientRecordLink)
+                          pyorientdb.OrientRecordLink)
         assert edge_result[0]._in.get_hash() == "#10:0", \
             "in is not equal to '#9:0': %r" % edge_result[0]._in.get_hash()
 
         # print (cluster_id[0]._out)
-        assert isinstance(edge_result[0]._out, pyorient.OrientRecordLink)
+        assert isinstance(edge_result[0]._out, pyorientdb.OrientRecordLink)
 
     def test_sql_batch_2(self):
 
@@ -177,7 +177,7 @@ class CommandTestCase(unittest.TestCase):
         # in OrientDB newest than 2.1
         if self.client.version.major == 2 and \
                 self.client.version.minor >= 1:
-            with self.assertRaises(pyorient.PyOrientCommandException):
+            with self.assertRaises(pyorientdb.PyOrientCommandException):
                 cluster_id = self.client.batch(cmd)
         else:
             cluster_id = self.client.batch(cmd)

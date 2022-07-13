@@ -2,7 +2,7 @@ __author__ = 'gremorian'
 
 import unittest
 
-import pyorient
+import pyorientdb
 import os
 
 os.environ['DEBUG'] = "0"
@@ -17,8 +17,8 @@ class TokenAuthTest(unittest.TestCase):
 
     def setUp(self):
 
-        self.client = pyorient.OrientDB("localhost", 2424)
-        client = pyorient.OrientDB("localhost", 2424)
+        self.client = pyorientdb.OrientDB("localhost", 2424)
+        client = pyorientdb.OrientDB("localhost", 2424)
         client.connect("root", "root")
         client.db_open('GratefulDeadConcerts', 'admin', 'admin')
         if client._connection.protocol < 26:
@@ -32,10 +32,10 @@ class TokenAuthTest(unittest.TestCase):
 
         self.client.set_session_token(True)
         self.client.db_open(
-            "GratefulDeadConcerts", "admin", "admin", pyorient.DB_TYPE_GRAPH, ""
+            "GratefulDeadConcerts", "admin", "admin", pyorientdb.DB_TYPE_GRAPH, ""
         )
         record = self.client.query('select from V limit 2')
-        assert isinstance(record[0], pyorient.otypes.OrientRecord)
+        assert isinstance(record[0], pyorientdb.otypes.OrientRecord)
 
         old_token = self.client.get_session_token()
         assert self.client.get_session_token() not in [
@@ -43,12 +43,12 @@ class TokenAuthTest(unittest.TestCase):
         ]
 
     def testReconnection(self):
-        self.client = pyorient.OrientDB("localhost", 2424)
+        self.client = pyorientdb.OrientDB("localhost", 2424)
         assert self.client.get_session_token() == b''
         global old_token
         self.client.set_session_token(old_token)
         record = self.client.query('select from V limit 2')
-        assert isinstance(record[0], pyorient.otypes.OrientRecord)
+        assert isinstance(record[0], pyorientdb.otypes.OrientRecord)
 
     def testReconnectionFailRoot(self):
         assert self.client.get_session_token() == b''
@@ -73,7 +73,7 @@ class TokenAuthTest(unittest.TestCase):
 
         assert self.client.get_session_token() == b''
 
-        client = pyorient.OrientDB("localhost", 2424)
+        client = pyorientdb.OrientDB("localhost", 2424)
         client.set_session_token(True)
         client.db_open("GratefulDeadConcerts", "admin", "admin")
         res1 = client.record_load("#9:1")
@@ -82,7 +82,7 @@ class TokenAuthTest(unittest.TestCase):
         del client
 
         #  create a new client
-        client = pyorient.OrientDB("localhost", 2424)
+        client = pyorientdb.OrientDB("localhost", 2424)
         client.set_session_token(actual_token)
         res3 = client.record_load("#9:1")
 

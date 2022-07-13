@@ -5,7 +5,7 @@ import getpass
 import math
 import os
 import pstats
-import pyorient
+import pyorientdb
 import random
 import string
 import sys
@@ -75,16 +75,16 @@ class PerformanceTestCase(unittest.TestCase):
 
     def setUp(self):
 
-        self.client = pyorient.OrientDB("localhost", 2424)
+        self.client = pyorientdb.OrientDB("localhost", 2424)
         self.client.connect("root", "root")
 
         db_name = "test_tr"
         try:
             self.client.db_drop(db_name)
-        except pyorient.PyOrientStorageException as e:
+        except pyorientdb.PyOrientStorageException as e:
             print(e)
         finally:
-            self.client.db_create(db_name, pyorient.DB_TYPE_GRAPH, pyorient.STORAGE_TYPE_MEMORY)
+            self.client.db_create(db_name, pyorientdb.DB_TYPE_GRAPH, pyorientdb.STORAGE_TYPE_MEMORY)
 
     def test_number_performance(self):
         banner('Number Performance')

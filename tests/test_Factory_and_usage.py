@@ -12,7 +12,7 @@ os.environ['DEBUG_VERBOSE'] = "0"
 # if os.path.realpath('.') not in sys.path:
 #     sys.path.insert(0, os.path.realpath('.'))
 
-import pyorient
+import pyorientdb
 
 
 class CommandTestCase(unittest.TestCase):
@@ -20,47 +20,47 @@ class CommandTestCase(unittest.TestCase):
 
     def test_hi_level_interface(self):
 
-        factory = pyorient.OrientDB('localhost', 2424)
+        factory = pyorientdb.OrientDB('localhost', 2424)
 
-        factory.get_message(pyorient.CONNECT).prepare(("root", "root")) \
+        factory.get_message(pyorientdb.CONNECT).prepare(("root", "root")) \
             .send().fetch_response()
 
         db_name = 'demo_db'
 
-        exists = factory.get_message(pyorient.DB_EXIST) \
-            .prepare([db_name, pyorient.STORAGE_TYPE_MEMORY]) \
+        exists = factory.get_message(pyorientdb.DB_EXIST) \
+            .prepare([db_name, pyorientdb.STORAGE_TYPE_MEMORY]) \
             .send().fetch_response()
 
         print("Before %r" % exists)
 
         try:
-            (factory.get_message(pyorient.DB_DROP)).prepare([db_name]) \
+            (factory.get_message(pyorientdb.DB_DROP)).prepare([db_name]) \
                 .send().fetch_response()
             assert True
 
-        except pyorient.PyOrientStorageException as e:
+        except pyorientdb.PyOrientStorageException as e:
             print(str(e))
 
         finally:
-            (factory.get_message(pyorient.DB_CREATE)).prepare(
-                (db_name, pyorient.DB_TYPE_GRAPH, pyorient.STORAGE_TYPE_MEMORY)
+            (factory.get_message(pyorientdb.DB_CREATE)).prepare(
+                (db_name, pyorientdb.DB_TYPE_GRAPH, pyorientdb.STORAGE_TYPE_MEMORY)
             ).send().fetch_response()
 
-        msg = factory.get_message(pyorient.DB_OPEN)
+        msg = factory.get_message(pyorientdb.DB_OPEN)
         clusters = msg.prepare(
-            (db_name, "admin", "admin", pyorient.DB_TYPE_GRAPH, "")
+            (db_name, "admin", "admin", pyorientdb.DB_TYPE_GRAPH, "")
         ).send().fetch_response()
 
         #######################################
 
         try:
-            create_class = factory.get_message(pyorient.COMMAND)
+            create_class = factory.get_message(pyorientdb.COMMAND)
             """:type create_class: pyorient.Messages.Database.CommandMessage"""
-            create_class.prepare((pyorient.QUERY_CMD, "create class demo_class")) \
+            create_class.prepare((pyorientdb.QUERY_CMD, "create class demo_class")) \
                 .send().fetch_response()
-            clusters = factory.get_message(pyorient.DB_RELOAD).prepare() \
+            clusters = factory.get_message(pyorientdb.DB_RELOAD).prepare() \
                 .send().fetch_response()
-        except pyorient.PyOrientStorageException:
+        except pyorientdb.PyOrientStorageException:
             pass
 
         from random import randint
@@ -70,8 +70,8 @@ class CommandTestCase(unittest.TestCase):
             ",".join(rec.keys()), "'" + "','".join(rec.values()) + "'"
         )
 
-        insert = factory.get_message(pyorient.COMMAND) \
-            .prepare((pyorient.QUERY_CMD, insert_query))
+        insert = factory.get_message(pyorientdb.COMMAND) \
+            .prepare((pyorientdb.QUERY_CMD, insert_query))
         sql_insert_result = insert.send().fetch_response()
 
         cluster = 1
@@ -80,85 +80,85 @@ class CommandTestCase(unittest.TestCase):
                 cluster = x.id
                 break
 
-        load = (factory.get_message(pyorient.RECORD_CREATE)) \
+        load = (factory.get_message(pyorientdb.RECORD_CREATE)) \
             .prepare([cluster, rec]) \
             .send().fetch_response()
 
-        factory.get_message(pyorient.CONNECT).prepare(("root", "root")) \
+        factory.get_message(pyorientdb.CONNECT).prepare(("root", "root")) \
             .send().fetch_response()
 
-        drop_db_result = (factory.get_message(pyorient.DB_DROP)) \
-            .prepare(['demo_db', pyorient.STORAGE_TYPE_MEMORY]) \
+        drop_db_result = (factory.get_message(pyorientdb.DB_DROP)) \
+            .prepare(['demo_db', pyorientdb.STORAGE_TYPE_MEMORY]) \
             .send().fetch_response()
 
         assert len(clusters) != 0
         assert isinstance(sql_insert_result, list)
         assert len(sql_insert_result) == 1
-        assert isinstance(load, pyorient.OrientRecord)
+        assert isinstance(load, pyorientdb.OrientRecord)
         assert load._rid != -1
         assert isinstance(drop_db_result, list)
         assert len(drop_db_result) == 0
 
     def test_hi_level_transaction(self):
 
-        factory = pyorient.OrientDB('localhost', 2424)
+        factory = pyorientdb.OrientDB('localhost', 2424)
 
-        factory.get_message(pyorient.CONNECT).prepare(("root", "root")) \
+        factory.get_message(pyorientdb.CONNECT).prepare(("root", "root")) \
             .send().fetch_response()
 
         db_name = 'test_transactions'
 
-        exists = factory.get_message(pyorient.DB_EXIST) \
-            .prepare([db_name, pyorient.STORAGE_TYPE_MEMORY]) \
+        exists = factory.get_message(pyorientdb.DB_EXIST) \
+            .prepare([db_name, pyorientdb.STORAGE_TYPE_MEMORY]) \
             .send().fetch_response()
 
         print("Before %r" % exists)
         try:
-            (factory.get_message(pyorient.DB_DROP)).prepare([db_name]) \
+            (factory.get_message(pyorientdb.DB_DROP)).prepare([db_name]) \
                 .send().fetch_response()
 
-        except pyorient.PyOrientStorageException as e:
+        except pyorientdb.PyOrientStorageException as e:
             print(str(e))
 
         finally:
-            (factory.get_message(pyorient.DB_CREATE)).prepare(
-                (db_name, pyorient.DB_TYPE_GRAPH, pyorient.STORAGE_TYPE_MEMORY)
+            (factory.get_message(pyorientdb.DB_CREATE)).prepare(
+                (db_name, pyorientdb.DB_TYPE_GRAPH, pyorientdb.STORAGE_TYPE_MEMORY)
             ).send().fetch_response()
 
-        msg = factory.get_message(pyorient.DB_OPEN)
+        msg = factory.get_message(pyorientdb.DB_OPEN)
         cluster_info = msg.prepare(
-            (db_name, "admin", "admin", pyorient.DB_TYPE_GRAPH, "")
+            (db_name, "admin", "admin", pyorientdb.DB_TYPE_GRAPH, "")
         ).send().fetch_response()
 
         #######################################
 
         # execute real create
         rec = {'alloggio': 'baita', 'lavoro': 'no', 'vacanza': 'lago'}
-        real_create_1 = (factory.get_message(pyorient.RECORD_CREATE)) \
+        real_create_1 = (factory.get_message(pyorientdb.RECORD_CREATE)) \
             .prepare((3, rec)) \
             .send().fetch_response()
 
         # create another real record
         rec = {'alloggio': 'baita', 'lavoro': 'no', 'vacanza': 'deserto'}
-        real_create_2 = (factory.get_message(pyorient.RECORD_CREATE)) \
+        real_create_2 = (factory.get_message(pyorientdb.RECORD_CREATE)) \
             .prepare((3, rec)) \
             .send().fetch_response()
 
         # prepare for an update
         rec3 = {'alloggio': 'albergo', 'lavoro': 'ufficio', 'vacanza': 'montagna'}
-        tx_update_1 = (factory.get_message(pyorient.RECORD_UPDATE)) \
+        tx_update_1 = (factory.get_message(pyorientdb.RECORD_UPDATE)) \
             .prepare((3, real_create_1._rid, rec3, real_create_1._version))
 
         # prepare transaction - cluster-id must be "-1" for transaction create
         rec1 = {'alloggio': 'casa', 'lavoro': 'ufficio', 'vacanza': 'mare'}
-        tx_create_1 = (factory.get_message(pyorient.RECORD_CREATE)).prepare((-1, rec1))
+        tx_create_1 = (factory.get_message(pyorientdb.RECORD_CREATE)).prepare((-1, rec1))
 
         rec2 = {'alloggio': 'baita', 'lavoro': 'no', 'vacanza': 'lago'}
-        tx_create_2 = (factory.get_message(pyorient.RECORD_CREATE)).prepare((-1, rec2))
+        tx_create_2 = (factory.get_message(pyorientdb.RECORD_CREATE)).prepare((-1, rec2))
 
-        tx_delete_1_for_real_create_2 = (factory.get_message(pyorient.RECORD_DELETE)).prepare((3, real_create_2._rid))
+        tx_delete_1_for_real_create_2 = (factory.get_message(pyorientdb.RECORD_DELETE)).prepare((3, real_create_2._rid))
 
-        tx = (factory.get_message(pyorient.TX_COMMIT))
+        tx = (factory.get_message(pyorientdb.TX_COMMIT))
         tx.begin()
         tx.attach(tx_create_1)
         tx.attach(tx_create_1)
@@ -186,59 +186,59 @@ class CommandTestCase(unittest.TestCase):
             assert res["#3:3"].vacanza == 'mare'
             assert res["#3:4"].vacanza == 'mare'
 
-        sid = (factory.get_message(pyorient.CONNECT)).prepare(("root", "root")) \
+        sid = (factory.get_message(pyorientdb.CONNECT)).prepare(("root", "root")) \
             .send().fetch_response()
 
-        (factory.get_message(pyorient.DB_DROP)).prepare(
-            [db_name, pyorient.STORAGE_TYPE_MEMORY]) \
+        (factory.get_message(pyorientdb.DB_DROP)).prepare(
+            [db_name, pyorientdb.STORAGE_TYPE_MEMORY]) \
             .send().fetch_response()
 
     def test_command(self):
 
-        connection = pyorient.OrientSocket("localhost", 2424)
+        connection = pyorientdb.OrientSocket("localhost", 2424)
 
-        factory = pyorient.OrientDB(connection)
+        factory = pyorientdb.OrientDB(connection)
 
-        session_id = (factory.get_message(pyorient.CONNECT)).prepare(("root", "root")) \
+        session_id = (factory.get_message(pyorientdb.CONNECT)).prepare(("root", "root")) \
             .send().fetch_response()
 
         db_name = "tmp_test1"
 
         try:
             # at the end drop the test database
-            (factory.get_message(pyorient.DB_DROP)).prepare([db_name, pyorient.STORAGE_TYPE_MEMORY]) \
+            (factory.get_message(pyorientdb.DB_DROP)).prepare([db_name, pyorientdb.STORAGE_TYPE_MEMORY]) \
                 .send().fetch_response()
 
-        except pyorient.PyOrientStorageException as e:
+        except pyorientdb.PyOrientStorageException as e:
             print(str(e))
 
         finally:
-            (factory.get_message(pyorient.DB_CREATE)).prepare(
-                (db_name, pyorient.DB_TYPE_GRAPH, pyorient.STORAGE_TYPE_MEMORY)
+            (factory.get_message(pyorientdb.DB_CREATE)).prepare(
+                (db_name, pyorientdb.DB_TYPE_GRAPH, pyorientdb.STORAGE_TYPE_MEMORY)
             ).send().fetch_response()
 
         # open as serialize2binary
-        msg = factory.get_message(pyorient.DB_OPEN)
+        msg = factory.get_message(pyorientdb.DB_OPEN)
         cluster_info = msg.prepare(
-            (db_name, "admin", "admin", pyorient.DB_TYPE_DOCUMENT, "", pyorient.OrientSerialization.CSV)
+            (db_name, "admin", "admin", pyorientdb.DB_TYPE_DOCUMENT, "", pyorientdb.OrientSerialization.CSV)
         ).send().fetch_response()
 
         # ##################
 
-        create_class = factory.get_message(pyorient.COMMAND)
-        ins_msg1 = factory.get_message(pyorient.COMMAND)
-        ins_msg2 = factory.get_message(pyorient.COMMAND)
-        ins_msg3 = factory.get_message(pyorient.COMMAND)
-        ins_msg4 = factory.get_message(pyorient.COMMAND)
-        upd_msg5 = factory.get_message(pyorient.RECORD_UPDATE)
+        create_class = factory.get_message(pyorientdb.COMMAND)
+        ins_msg1 = factory.get_message(pyorientdb.COMMAND)
+        ins_msg2 = factory.get_message(pyorientdb.COMMAND)
+        ins_msg3 = factory.get_message(pyorientdb.COMMAND)
+        ins_msg4 = factory.get_message(pyorientdb.COMMAND)
+        upd_msg5 = factory.get_message(pyorientdb.RECORD_UPDATE)
 
-        req_msg = factory.get_message(pyorient.COMMAND)
+        req_msg = factory.get_message(pyorientdb.COMMAND)
 
-        create_class.prepare((pyorient.QUERY_CMD, "create class c_test extends V"))
-        ins_msg1.prepare((pyorient.QUERY_CMD, "insert into c_test ( Band, Song ) values( 'AC/DC', 'Hells Bells' )"))
-        ins_msg2.prepare((pyorient.QUERY_CMD, "insert into c_test ( Band, Song ) values( 'AC/DC', 'Who Made Who' )"))
-        ins_msg3.prepare((pyorient.QUERY_CMD, "insert into c_test ( Band, Song ) values( 'AC/DC', 'T.N.T.' )"))
-        ins_msg4.prepare((pyorient.QUERY_CMD, "insert into c_test ( Band, Song ) values( 'AC/DC', 'High Voltage' )"))
+        create_class.prepare((pyorientdb.QUERY_CMD, "create class c_test extends V"))
+        ins_msg1.prepare((pyorientdb.QUERY_CMD, "insert into c_test ( Band, Song ) values( 'AC/DC', 'Hells Bells' )"))
+        ins_msg2.prepare((pyorientdb.QUERY_CMD, "insert into c_test ( Band, Song ) values( 'AC/DC', 'Who Made Who' )"))
+        ins_msg3.prepare((pyorientdb.QUERY_CMD, "insert into c_test ( Band, Song ) values( 'AC/DC', 'T.N.T.' )"))
+        ins_msg4.prepare((pyorientdb.QUERY_CMD, "insert into c_test ( Band, Song ) values( 'AC/DC', 'High Voltage' )"))
 
         cluster = create_class.send().fetch_response()
         rec1 = ins_msg1.send().fetch_response()
@@ -250,7 +250,7 @@ class CommandTestCase(unittest.TestCase):
         upd_res = upd_msg5.prepare((rec1._rid, rec1._rid, {'Band': 'Metallica', 'Song': 'One'})) \
             .send().fetch_response()
 
-        res = req_msg.prepare([pyorient.QUERY_SYNC, "select from c_test"]).send().fetch_response()
+        res = req_msg.prepare([pyorientdb.QUERY_SYNC, "select from c_test"]).send().fetch_response()
 
         assert isinstance(cluster, list)
         assert rec1._rid == res[0]._rid
@@ -274,7 +274,7 @@ class CommandTestCase(unittest.TestCase):
 
         # classes are allowed in record create/update/load
         rec = {'@c_test': {'alloggio': 'casa', 'lavoro': 'ufficio', 'vacanza': 'mare'}}
-        rec_position = (factory.get_message(pyorient.RECORD_CREATE)) \
+        rec_position = (factory.get_message(pyorientdb.RECORD_CREATE)) \
             .prepare((cluster[0], rec)) \
             .send().fetch_response()
 
@@ -282,11 +282,11 @@ class CommandTestCase(unittest.TestCase):
         assert rec_position._rid is not None
 
         rec = {'@c_test': {'alloggio': 'albergo', 'lavoro': 'ufficio', 'vacanza': 'montagna'}}
-        update_success = (factory.get_message(pyorient.RECORD_UPDATE)) \
+        update_success = (factory.get_message(pyorientdb.RECORD_UPDATE)) \
             .prepare((rec_position._rid, rec_position._rid, rec)) \
             .send().fetch_response()
 
-        req_msg = factory.get_message(pyorient.RECORD_LOAD)
+        req_msg = factory.get_message(pyorientdb.RECORD_LOAD)
         res = req_msg.prepare([rec_position._rid, "*:-1"]) \
             .send().fetch_response()
 

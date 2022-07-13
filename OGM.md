@@ -23,7 +23,7 @@ pyorient splits the process of connecting to your OrientDB server into two steps
 For these two steps, you will need to bring in two interfaces
 
 ```python
-from pyorient.ogm import Graph, Config
+from pyorientdb.ogm import Graph, Config
 ```
 
 **Graph** is central to the OGM. It wraps the lower-level pyorient interface **pyorient.OrientDB** and does the job of mapping your python classes to a database schema, and vice versa.
@@ -60,13 +60,15 @@ Python classes will only be mapped to a database schema if they belong to a _reg
 There are two types of registries, one to indicate a vertex or node type, and the other an edge or relationship type. Adding your python class to a registry is a matter of subclassing:
 
 ```python
-from pyorient.ogm.declarative import declarative_node, declarative_relationship
+from pyorientdb.ogm.declarative import declarative_node, declarative_relationship
 
 Node = declarative_node()
 Relationship = declarative_relationship()
 
+
 class Person(Node):
     pass
+
 
 class Likes(Relationship):
     pass
@@ -144,7 +146,7 @@ PyOrient does not (yet?) ship with a tool for generating python code from a data
 This dictionary is suitable for passing to the **Graph** _include_ method.
 
 ```python
-from pyorient.ogm.declarative import declarative_node, declarative_relationship
+from pyorientdb.ogm.declarative import declarative_node, declarative_relationship
 
 SchemaNode = declarative_node()
 SchemaRelationship = declarative_relationship()
@@ -226,7 +228,7 @@ PyOrient has basic support for the *Gremlin* graph traversal, through Groovy scr
 
 ```python
 import pathlib
-from pyorient.groovy import GroovyScripts
+from pyorientdb.groovy import GroovyScripts
 
 for p in pathlib.Path('scripts/').iterdir():
     if p.is_file() and p.suffix == '.groovy':

@@ -6,7 +6,7 @@ import os
 os.environ['DEBUG'] = "0"
 os.environ['DEBUG_VERBOSE'] = "0"
 
-import pyorient
+import pyorientdb
 
 
 class GraphUsageTestCase(unittest.TestCase):
@@ -17,21 +17,21 @@ class GraphUsageTestCase(unittest.TestCase):
 
     def setUp(self):
 
-        self.client = pyorient.OrientDB("localhost", 2424)
+        self.client = pyorientdb.OrientDB("localhost", 2424)
         self.client.connect("root", "root")
 
         db_name = "animals"
         try:
             self.client.db_drop(db_name)
-        except pyorient.PyOrientStorageException as e:
+        except pyorientdb.PyOrientStorageException as e:
             print(e)
         finally:
-            db = self.client.db_create(db_name, pyorient.DB_TYPE_GRAPH,
-                                       pyorient.STORAGE_TYPE_MEMORY)
+            db = self.client.db_create(db_name, pyorientdb.DB_TYPE_GRAPH,
+                                       pyorientdb.STORAGE_TYPE_MEMORY)
             pass
 
         self.cluster_info = self.client.db_open(
-            db_name, "admin", "admin", pyorient.DB_TYPE_GRAPH, ""
+            db_name, "admin", "admin", pyorientdb.DB_TYPE_GRAPH, ""
         )
 
     def testGraph(self):

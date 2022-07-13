@@ -3,11 +3,11 @@ __author__ = 'Ostico <ostico@gmail.com>'
 import os
 import unittest
 
-from pyorient.messages.database import *
-from pyorient.messages.commands import *
-from pyorient.messages.database import ConnectMessage
-from pyorient.messages.records import *
-from pyorient.constants import *
+from pyorientdb.messages.database import *
+from pyorientdb.messages.commands import *
+from pyorientdb.messages.database import ConnectMessage
+from pyorientdb.messages.records import *
+from pyorientdb.constants import *
 
 os.environ['DEBUG'] = "1"
 os.environ['DEBUG_VERBOSE'] = "0"

@@ -1,32 +1,32 @@
 import unittest
-from pyorient.serializations import OrientSerialization
-from pyorient.otypes import OrientBinaryObject, OrientRecord
+from pyorientdb.serializations import OrientSerialization
+from pyorientdb.otypes import OrientBinaryObject, OrientRecord
 
 
 def binary_db_connect():
-    import pyorient
-    DB = pyorient.OrientDB("localhost", 2424, OrientSerialization.Binary)
+    import pyorientdb
+    DB = pyorientdb.OrientDB("localhost", 2424, OrientSerialization.Binary)
     DB.connect("root", "root")
 
     db_name = "binary_test"
     try:
         DB.db_drop(db_name)
-    except pyorient.PyOrientCommandException as e:
+    except pyorientdb.PyOrientCommandException as e:
         print(e)
     finally:
-        db = DB.db_create(db_name, pyorient.DB_TYPE_GRAPH,
-                          pyorient.STORAGE_TYPE_MEMORY)
+        db = DB.db_create(db_name, pyorientdb.DB_TYPE_GRAPH,
+                          pyorientdb.STORAGE_TYPE_MEMORY)
         pass
 
     cluster_info = DB.db_open(
-        db_name, "admin", "admin", pyorient.DB_TYPE_GRAPH, ""
+        db_name, "admin", "admin", pyorientdb.DB_TYPE_GRAPH, ""
     )
 
     return DB
 
 
 def skip_binary_if_pyorient_native_not_installed( func ):
-    from pyorient.serializations import binary_support
+    from pyorientdb.serializations import binary_support
     from os import sys
     import types
 
@@ -169,7 +169,7 @@ class SerializationTestCase(unittest.TestCase):
 
     @skip_binary_if_pyorient_native_not_installed
     def test_binary_link(self):
-        from pyorient.otypes import OrientRecordLink
+        from pyorientdb.otypes import OrientRecordLink
         DB = binary_db_connect()
         DB.command("CREATE CLASS MyModel EXTENDS V")
         cluster_id = DB.command("select classes[name='MyModel']" + \
@@ -286,23 +286,23 @@ class SerializationTestCase(unittest.TestCase):
         # TODO: add several more complex tests to have more coverage
 
     def test_csv_escape(self):
-        import pyorient
-        DB = pyorient.OrientDB("localhost", 2424)
+        import pyorientdb
+        DB = pyorientdb.OrientDB("localhost", 2424)
         DB.connect("root", "root")
 
         db_name = "test_escape"
         try:
             DB.db_drop(db_name)
 
-        except pyorient.PyOrientStorageException as e:
+        except pyorientdb.PyOrientStorageException as e:
             print(e)
 
         finally:
-            db = DB.db_create(db_name, pyorient.DB_TYPE_GRAPH,
-                              pyorient.STORAGE_TYPE_MEMORY)
+            db = DB.db_create(db_name, pyorientdb.DB_TYPE_GRAPH,
+                              pyorientdb.STORAGE_TYPE_MEMORY)
 
         cluster_info = DB.db_open(
-            db_name, "admin", "admin", pyorient.DB_TYPE_GRAPH, ""
+            db_name, "admin", "admin", pyorientdb.DB_TYPE_GRAPH, ""
         )
 
         cluster_id = DB.command("CREATE CLASS MyModel EXTENDS V")[0]

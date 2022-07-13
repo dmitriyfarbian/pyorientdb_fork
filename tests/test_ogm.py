@@ -4,15 +4,15 @@ import decimal
 import os.path
 from datetime import datetime
 
-from pyorient import PyOrientCommandException, PyOrientSQLParsingException
-from pyorient.ogm import Graph, Config
-from pyorient.groovy import GroovyScripts
+from pyorientdb import PyOrientCommandException, PyOrientSQLParsingException
+from pyorientdb.ogm import Graph, Config
+from pyorientdb.groovy import GroovyScripts
 
-from pyorient.ogm.declarative import declarative_node, declarative_relationship
-from pyorient.ogm.property import (
+from pyorientdb.ogm.declarative import declarative_node, declarative_relationship
+from pyorientdb.ogm.property import (
     String, Date, DateTime, Decimal, Double, Integer, EmbeddedMap, EmbeddedSet,
     Link, UUID)
-from pyorient.ogm.what import expand, in_, out, distinct, sysdate
+from pyorientdb.ogm.what import expand, in_, out, distinct, sysdate
 
 AnimalsNode = declarative_node()
 AnimalsRelationship = declarative_relationship()

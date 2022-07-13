@@ -2,11 +2,11 @@ import os
 import sys
 import unittest
 
-from pyorient.constants import CLUSTER_TYPE_PHYSICAL
-from pyorient.messages.database import DbOpenMessage, DbReloadMessage
-from pyorient.messages.cluster import DataClusterDataRangeMessage, \
+from pyorientdb.constants import CLUSTER_TYPE_PHYSICAL
+from pyorientdb.messages.database import DbOpenMessage, DbReloadMessage
+from pyorientdb.messages.cluster import DataClusterDataRangeMessage, \
     DataClusterDropMessage, DataClusterAddMessage
-from pyorient import OrientSocket
+from pyorientdb import OrientSocket
 
 __author__ = 'Ostico <ostico@gmail.com>'
 

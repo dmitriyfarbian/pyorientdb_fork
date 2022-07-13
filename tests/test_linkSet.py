@@ -2,7 +2,7 @@ __author__ = 'gremorian'
 
 import unittest
 
-import pyorient
+import pyorientdb
 
 
 class LinkSetTestCase(unittest.TestCase):
@@ -10,21 +10,21 @@ class LinkSetTestCase(unittest.TestCase):
 
     def setUp(self):
 
-        self.client = pyorient.OrientDB("localhost", 2424)
+        self.client = pyorientdb.OrientDB("localhost", 2424)
         self.client.connect("root", "root")
 
         db_name = "test_set"
         try:
             self.client.db_drop(db_name)
-        except pyorient.PyOrientStorageException as e:
+        except pyorientdb.PyOrientStorageException as e:
             print(e)
         finally:
-            db = self.client.db_create(db_name, pyorient.DB_TYPE_GRAPH,
-                                       pyorient.STORAGE_TYPE_MEMORY)
+            db = self.client.db_create(db_name, pyorientdb.DB_TYPE_GRAPH,
+                                       pyorientdb.STORAGE_TYPE_MEMORY)
             pass
 
         self.client.db_open(
-            db_name, "admin", "admin", pyorient.DB_TYPE_GRAPH, ""
+            db_name, "admin", "admin", pyorientdb.DB_TYPE_GRAPH, ""
         )
 
         self._links_cluster_id = self.client.command("create class links "
@@ -141,18 +141,18 @@ class LinkSetTestCase(unittest.TestCase):
                                         )[0].oRecordData
 
     def testLinkList(self):
-        DB = pyorient.OrientDB("localhost", 2424)
+        DB = pyorientdb.OrientDB("localhost", 2424)
         DB.connect("root", "root")
 
         db_name = "test_tr"
         try:
             DB.db_drop(db_name)
 
-        except pyorient.PyOrientStorageException as e:
+        except pyorientdb.PyOrientStorageException as e:
             print(e)
 
         finally:
-            DB.db_create(db_name, pyorient.DB_TYPE_GRAPH, pyorient.STORAGE_TYPE_MEMORY)
+            DB.db_create(db_name, pyorientdb.DB_TYPE_GRAPH, pyorientdb.STORAGE_TYPE_MEMORY)
 
         DB.command("insert into V set key1 = 'row0'")
         DB.command("insert into V set key1 = 'row1'")
@@ -160,10 +160,10 @@ class LinkSetTestCase(unittest.TestCase):
         DB.command("insert into V set key1 = 'row3'")
 
         # V is cluster 9 in OrientDB 2.2, in ODB 3.1+ it is cluster 10
-        o1 = pyorient.OrientRecordLink("10:0")
-        o2 = pyorient.OrientRecordLink("10:1")
-        o3 = pyorient.OrientRecordLink("10:2")
-        o4 = pyorient.OrientRecordLink("10:3")
+        o1 = pyorientdb.OrientRecordLink("10:0")
+        o2 = pyorientdb.OrientRecordLink("10:1")
+        o3 = pyorientdb.OrientRecordLink("10:2")
+        o4 = pyorientdb.OrientRecordLink("10:3")
         lList = [o1, o2, o3, o4]
 
         tx = DB.tx_commit()
@@ -177,4 +177,4 @@ class LinkSetTestCase(unittest.TestCase):
         # Removed major version check
         _rec = DB.record_load(rec._record_content._rid)
         assert len(_rec.oRecordData['test']) == 4
-        assert isinstance(_rec.oRecordData['test'][0], pyorient.OrientRecordLink)
+        assert isinstance(_rec.oRecordData['test'][0], pyorientdb.OrientRecordLink)

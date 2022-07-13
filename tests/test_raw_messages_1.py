@@ -2,13 +2,13 @@ import os
 import sys
 import unittest
 
-from pyorient.exceptions import PyOrientCommandException, PyOrientException, PyOrientDatabaseException
-from pyorient import OrientSocket
-from pyorient.messages.connection import ShutdownMessage
-from pyorient.messages.database import DbExistsMessage, DbOpenMessage, DbCreateMessage, \
+from pyorientdb.exceptions import PyOrientCommandException, PyOrientException, PyOrientDatabaseException
+from pyorientdb import OrientSocket
+from pyorientdb.messages.connection import ShutdownMessage
+from pyorientdb.messages.database import DbExistsMessage, DbOpenMessage, DbCreateMessage, \
     DbDropMessage, DbReloadMessage, DbCloseMessage, DbSizeMessage, DbListMessage, ConnectMessage
-from pyorient.messages.commands import CommandMessage
-from pyorient.constants import DB_TYPE_DOCUMENT, QUERY_SYNC, QUERY_GREMLIN, \
+from pyorientdb.messages.commands import CommandMessage
+from pyorientdb.constants import DB_TYPE_DOCUMENT, QUERY_SYNC, QUERY_GREMLIN, \
     STORAGE_TYPE_PLOCAL
 
 os.environ['DEBUG'] = "1"

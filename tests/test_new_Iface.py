@@ -11,8 +11,8 @@ os.environ['DEBUG_VERBOSE'] = "0"
 # if os.path.realpath('.') not in sys.path:
 #     sys.path.insert(0, os.path.realpath('.'))
 
-import pyorient
-from pyorient import OrientRecord
+import pyorientdb
+from pyorientdb import OrientRecord
 
 
 class CommandTestCase(unittest.TestCase):
@@ -20,7 +20,7 @@ class CommandTestCase(unittest.TestCase):
 
     def test_new_client_interface(self):
 
-        client = pyorient.OrientDB("localhost", 2424)
+        client = pyorientdb.OrientDB("localhost", 2424)
         session_id = client.connect("root", "root")
 
         db_name = "GratefulDeadConcerts"
@@ -57,20 +57,20 @@ class CommandTestCase(unittest.TestCase):
 
         # TEST COMMANDS
         db_name = 'test_commands'
-        exists = client.db_exists(db_name, pyorient.STORAGE_TYPE_MEMORY)
+        exists = client.db_exists(db_name, pyorientdb.STORAGE_TYPE_MEMORY)
 
         print("Before %r" % exists)
         try:
             client.db_drop(db_name)
             assert True
-        except pyorient.PyOrientStorageException as e:
+        except pyorientdb.PyOrientStorageException as e:
             print(str(e))
         finally:
-            client.db_create(db_name, pyorient.DB_TYPE_GRAPH,
-                             pyorient.STORAGE_TYPE_MEMORY)
+            client.db_create(db_name, pyorientdb.DB_TYPE_GRAPH,
+                             pyorientdb.STORAGE_TYPE_MEMORY)
 
         cluster_info = client.db_open(
-            db_name, "admin", "admin", pyorient.DB_TYPE_GRAPH, ""
+            db_name, "admin", "admin", pyorientdb.DB_TYPE_GRAPH, ""
         )
 
         cluster_id = client.command("create class my_class extends V")[0]
@@ -100,7 +100,7 @@ class CommandTestCase(unittest.TestCase):
 
     def test_cluster_add_drop_recount(self):
 
-        client = pyorient.OrientDB("localhost", 2424)  # TEST COMMANDS
+        client = pyorientdb.OrientDB("localhost", 2424)  # TEST COMMANDS
         client.connect("root", "root")
 
         db_name = 'test_commands'
@@ -108,19 +108,19 @@ class CommandTestCase(unittest.TestCase):
         try:
             client.db_drop(db_name)
             assert True
-        except pyorient.PyOrientStorageException as e:
+        except pyorientdb.PyOrientStorageException as e:
             print(str(e))
         finally:
-            client.db_create(db_name, pyorient.DB_TYPE_GRAPH,
-                             pyorient.STORAGE_TYPE_MEMORY)
+            client.db_create(db_name, pyorientdb.DB_TYPE_GRAPH,
+                             pyorientdb.STORAGE_TYPE_MEMORY)
 
         cluster_info = client.db_open(
-            db_name, "admin", "admin", pyorient.DB_TYPE_GRAPH, ""
+            db_name, "admin", "admin", pyorientdb.DB_TYPE_GRAPH, ""
         )
 
         # CLUSTERS
         new_cluster_id = client.data_cluster_add(
-            'my_cluster_1234567', pyorient.CLUSTER_TYPE_PHYSICAL
+            'my_cluster_1234567', pyorientdb.CLUSTER_TYPE_PHYSICAL
         )
         assert new_cluster_id > 0
 
@@ -151,7 +151,7 @@ class CommandTestCase(unittest.TestCase):
 
     def test_transaction_new_iface(self):
 
-        client = pyorient.OrientDB('localhost', 2424)
+        client = pyorientdb.OrientDB('localhost', 2424)
         client.connect("root", "root")
 
         db_name = 'test_transactions'
@@ -159,14 +159,14 @@ class CommandTestCase(unittest.TestCase):
         try:
             client.db_drop(db_name)
 
-        except pyorient.PyOrientStorageException as e:
+        except pyorientdb.PyOrientStorageException as e:
             print(str(e))
 
         finally:
-            client.db_create(db_name, pyorient.DB_TYPE_GRAPH, pyorient.STORAGE_TYPE_MEMORY)
+            client.db_create(db_name, pyorientdb.DB_TYPE_GRAPH, pyorientdb.STORAGE_TYPE_MEMORY)
 
         cluster_info = client.db_open(
-            db_name, "admin", "admin", pyorient.DB_TYPE_GRAPH, ""
+            db_name, "admin", "admin", pyorientdb.DB_TYPE_GRAPH, ""
         )
 
         #######################################
@@ -219,11 +219,11 @@ class CommandTestCase(unittest.TestCase):
             assert res["#3:3"].vacanza == 'mare'
 
         client.connect("root", "root")
-        client.db_drop(db_name, pyorient.STORAGE_TYPE_MEMORY)
+        client.db_drop(db_name, pyorientdb.STORAGE_TYPE_MEMORY)
 
     def test_reserved_words_and_batch_scripts(self):
 
-        client = pyorient.OrientDB("localhost", 2424)
+        client = pyorientdb.OrientDB("localhost", 2424)
         client.connect("root", "root")
 
         if client._connection.protocol <= 21:
@@ -234,15 +234,15 @@ class CommandTestCase(unittest.TestCase):
         try:
             client.db_drop(db_name)
 
-        except pyorient.PyOrientStorageException as e:
+        except pyorientdb.PyOrientStorageException as e:
             print(e)
 
         finally:
-            db = client.db_create(db_name, pyorient.DB_TYPE_GRAPH,
-                                  pyorient.STORAGE_TYPE_MEMORY)
+            db = client.db_create(db_name, pyorientdb.DB_TYPE_GRAPH,
+                                  pyorientdb.STORAGE_TYPE_MEMORY)
 
         cluster_info = client.db_open(
-            db_name, "admin", "admin", pyorient.DB_TYPE_GRAPH, ""
+            db_name, "admin", "admin", pyorientdb.DB_TYPE_GRAPH, ""
         )
 
         class_id1 = client.command("create class my_v_class extends V")[0]
@@ -255,31 +255,31 @@ class CommandTestCase(unittest.TestCase):
         res = client.command(sql_edge)
 
     def test_use_of_dir(self):
-        client = pyorient.OrientDB("localhost", 2424)
+        client = pyorientdb.OrientDB("localhost", 2424)
         client.connect("root", "root")
         dir(client)
 
     def test_alter_statement(self):
-        client = pyorient.OrientDB("localhost", 2424)
+        client = pyorientdb.OrientDB("localhost", 2424)
         client.connect("root", "root")
 
         db_name = "test_1234_db"
         try:
             client.db_drop(db_name)
-        except pyorient.PyOrientStorageException as e:
+        except pyorientdb.PyOrientStorageException as e:
             print(e)
         finally:
-            db = client.db_create(db_name, pyorient.DB_TYPE_GRAPH,
-                                  pyorient.STORAGE_TYPE_MEMORY)
+            db = client.db_create(db_name, pyorientdb.DB_TYPE_GRAPH,
+                                  pyorientdb.STORAGE_TYPE_MEMORY)
 
         cluster_info = client.db_open(
-            db_name, "admin", "admin", pyorient.DB_TYPE_GRAPH, ""
+            db_name, "admin", "admin", pyorientdb.DB_TYPE_GRAPH, ""
         )
 
         client.command("create class obj")
         client.command("create property obj._KEY string")
         client.command("alter property obj._KEY mandatory true")
-        with self.assertRaises(pyorient.PyOrientSQLParsingException) as context:
+        with self.assertRaises(pyorientdb.PyOrientSQLParsingException) as context:
             client.command("create index KEY on obj _KEY unique")
 
         self.assertTrue('Error '
@@ -292,13 +292,13 @@ class CommandTestCase(unittest.TestCase):
 
     def test_limit(self):
 
-        client = pyorient.OrientDB("localhost", 2424)
+        client = pyorientdb.OrientDB("localhost", 2424)
         client.connect("root", "root")
 
         db_name = "GratefulDeadConcerts"
 
         cluster_info = client.db_open(
-            db_name, "admin", "admin", pyorient.DB_TYPE_GRAPH, ""
+            db_name, "admin", "admin", pyorientdb.DB_TYPE_GRAPH, ""
         )
 
         assert len(client.query("select from V Limit 1")) == 1

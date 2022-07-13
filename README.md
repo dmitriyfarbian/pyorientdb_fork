@@ -1,45 +1,31 @@
-# pyorient
+# pyorientdb
 
-**master**   
+**Master**   
 [![Build Status](https://travis-ci.org/mogui/pyorient.svg?branch=master)](https://travis-ci.org/mogui/pyorient) [![Coverage Status](https://coveralls.io/repos/mogui/pyorient/badge.svg?branch=master&service=github)](https://coveralls.io/github/mogui/pyorient?branch=master)
 
-**develop**   
+**Develop**   
 [![Build Status](https://travis-ci.org/mogui/pyorient.svg?branch=develop)](https://travis-ci.org/mogui/pyorient) [![Coverage Status](https://coveralls.io/repos/mogui/pyorient/badge.svg?branch=develop&service=github)](https://coveralls.io/github/mogui/pyorient?branch=develop)
 
 [Orientdb](http://www.orientechnologies.com/) driver for python that uses the binary protocol.
 
-> **Note**: checkout branch `2.2.x` for connecting to OrientDB version `2.2.x` and branch `3.1.x` for OrientDB version `3.1.x`. However, be aware that version `3.1.x` is work in progress and not fully functional yet.
-
-Pyorient works with orientdb version 1.7 and later.
-> **Warning** Some issues are experimented with record_create/record_upload and OrientDB < 2.0. These command are strongly discouraged with these versions
-
-> **NOTICE** Prior to version 1.4.9 there was a potential SQL injection vulnerability that now is fixed.
-(see [details](https://github.com/mogui/pyorient/pull/172) , [details](https://github.com/mogui/pyorient/pull/182) )
+## Disclaimer
+This fork of [`pyorient` by Ostico](https://github.com/Ostico/pyorient) is an updated version of the fork maintained by [orienttechnologies](https://github.com/orientechnologies/pyorient). Efforts were made to have the [`pyorient`](https://pypi.org/project/pyorient/) PyPI package transferred to orienttechnologies, but after a year there has been no progress (see [the GitHub issue](https://github.com/orientechnologies/pyorient/issues/34)). Additionally, orienttechnologies does not appear to be actively maintaining this driver, and I have made some small modifications to get it working with OrientDB 3.0+, **but I do not plan to actively update this fork**. Rather, I wanted to have a working PyPI package that those using Python with OrientDB can easily download and install, so I am creating a new package called `pyorientdb` using my updated fork. Any and all contributions and support are welcome.  
 
 ## Installation
-
-	pip install pyorient
+```bash
+pip install pyorientdb
+```
 
 ## Documentation
 
   [OrientDB PyOrient Python Driver](http://orientdb.com/docs/last/PyOrient.html)
 
-## How to contribute
-
-- Fork the project
-- work on **develop** branch
-- Make your changes
-- Add tests for it. This is important so I don't break it in a future version unintentionally
-- Send me a pull request *(pull request to master will be rejected)*
-- ???
-- PROFIT
-
 ## How to run tests
 
-- ensure you have `ant` and `nose` installed properly
-- bootstrap orient by running `./ci/ci-start.sh` from project directory   
-  *it will download latest orient and make some change on config and database for the tests*
-- run with `nosetests`
+- Ensure you have `ant` and `nose` installed properly
+- Bootstrap orient by running `./ci/ci-start.sh` from project directory   
+  * It will download latest orient and make some change on config and database for the tests*
+- Run with `nosetests`
 
 ## Using this library with OrientDB 3.1+
 As of OrientDB 3.1+, session tokens are now required for interacting with databases. You can find a brief description 
@@ -72,12 +58,8 @@ client.db_exists("GratefulDeadConcerts")
 # True
 ```
 
-## Usage
-> Proper documentation will be available soon, for now you have to read the tests.
 
-PyOrient is composed of two layers. At its foundation is the python wrapper around OrientDB's binary protocol. Built upon that - and OrientDB's own SQL language - is the Object-Graph Mapper (or OGM). The OGM layer is documented separately.
-
-### Init the client
+### Init the Client
 ```python
 client = pyorient.OrientDB("localhost", 2424)
 session_id = client.connect( "admin", "admin" )
@@ -291,16 +273,16 @@ assert sessionToken != new_sessionToken
 
 The GRAPH representation of animals and its food
 
-
 ```python
-import pyorient
-client = pyorient.OrientDB("localhost", 2424)  # host, port
+import pyorientdb
+
+client = pyorientdb.OrientDB("localhost", 2424)  # host, port
 
 ### open a connection (username and password)
 client.connect("admin", "admin")
 
 ### create a database
-client.db_create("animals", pyorient.DB_TYPE_GRAPH, pyorient.STORAGE_TYPE_MEMORY)
+client.db_create("animals", pyorientdb.DB_TYPE_GRAPH, pyorientdb.STORAGE_TYPE_MEMORY)
 
 ### select to use that database
 client.db_open("animals", "admin", "admin")
@@ -313,7 +295,9 @@ client.command("insert into Animal set name = 'rat', specie = 'rodent'")
 
 ### query the values
 client.query("select * from Animal")
-[<OrientRecord at 0x7f>..., ...]
+[ < OrientRecord
+at
+0x7f > ..., ...]
 
 ### Create the vertex and insert the food values
 
@@ -325,34 +309,31 @@ client.command('create class Eat extends E')
 
 ### Lets the rat likes to eat pea
 eat_edges = client.command(
-    "create edge Eat from ("
-    "select from Animal where name = 'rat'"
-    ") to ("
-    "select from Food where name = 'pea'"
-    ")"
+  "create edge Eat from ("
+  "select from Animal where name = 'rat'"
+  ") to ("
+  "select from Food where name = 'pea'"
+  ")"
 )
 
 ### Who eats the peas?
 pea_eaters = client.command("select expand( in( Eat )) from Food where name = 'pea'")
 for animal in pea_eaters:
-    print(animal.name, animal.specie)
+  print(animal.name, animal.specie)
 'rat rodent'
 ...
 
 ### What each animal eats?
 animal_foods = client.command("select expand( out( Eat )) from Animal")
 for food in animal_foods:
-    animal = client.query(
-                "select name from ( select expand( in('Eat') ) from Food where name = 'pea' )"
-            )[0]
-    print(food.name, food.color, animal.name)
+  animal = client.query(
+    "select name from ( select expand( in('Eat') ) from Food where name = 'pea' )"
+  )[0]
+  print(food.name, food.color, animal.name)
 'pea green rat'
 ```
 
 ## Authors
 - [mogui](https://github.com/mogui/)
 - [ostico](https://github.com/ostico/)
-
-## Copyright
-
-Copyright (c) 2014 Niko Usai, Domenico Lupinetti. See LICENSE for details.
+- [brucetony](https://github.com/brucetony)

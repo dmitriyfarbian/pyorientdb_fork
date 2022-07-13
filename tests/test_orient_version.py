@@ -1,5 +1,5 @@
 import unittest
-import pyorient
+import pyorientdb
 
 # db_name = "GratefulDeadConcerts"
 # client = pyorient.OrientDB("localhost", 2424)
@@ -15,7 +15,7 @@ class OrientVersionTestCase( unittest.TestCase ):
 
     def test_string1(self):
         release = "2.2.0-rc1"
-        x = pyorient.OrientVersion(release)
+        x = pyorientdb.OrientVersion(release)
         assert isinstance( x.major, int )
         assert isinstance( x.minor, int )
         assert isinstance( x.build, int )
@@ -27,7 +27,7 @@ class OrientVersionTestCase( unittest.TestCase ):
 
     def test_string2(self):
         release = "1.10.1"
-        x = pyorient.OrientVersion(release)
+        x = pyorientdb.OrientVersion(release)
         assert isinstance( x.major, int )
         assert isinstance( x.minor, int )
         assert isinstance( x.build, int )
@@ -38,7 +38,7 @@ class OrientVersionTestCase( unittest.TestCase ):
 
     def test_string3(self):
         release = "2.0.19-rc2"
-        x = pyorient.OrientVersion(release)
+        x = pyorientdb.OrientVersion(release)
         assert isinstance( x.major, int )
         assert isinstance( x.minor, int )
         assert isinstance( x.build, int )
@@ -50,7 +50,7 @@ class OrientVersionTestCase( unittest.TestCase ):
 
     def test_string4(self):
         release = "2.2.0 ;Unknown (build 0)"
-        x = pyorient.OrientVersion(release)
+        x = pyorientdb.OrientVersion(release)
         assert isinstance( x.major, int )
         assert isinstance( x.minor, int )
         assert isinstance( x.build, int )
@@ -62,7 +62,7 @@ class OrientVersionTestCase( unittest.TestCase ):
 
     def test_string5(self):
         release = "2.2-rc1 ;Unknown (build 0)"
-        x = pyorient.OrientVersion(release)
+        x = pyorientdb.OrientVersion(release)
         assert isinstance( x.major, int )
         assert isinstance( x.minor, int )
         assert isinstance( x.build, int )
@@ -74,7 +74,7 @@ class OrientVersionTestCase( unittest.TestCase ):
 
     def test_string6(self):
         release = "v2.2"
-        x = pyorient.OrientVersion(release)
+        x = pyorientdb.OrientVersion(release)
         assert isinstance( x.major, int )
         assert isinstance( x.minor, int )
         assert isinstance( x.build, int )
@@ -86,7 +86,7 @@ class OrientVersionTestCase( unittest.TestCase ):
 
     def test_string_version2(self):
         release = "2.2.0 (build develop@r79d281140b01c0bc3b566a46a64f1573cb359783; 2016-05-18 14:14:32+0000)"
-        x = pyorient.OrientVersion(release)
+        x = pyorientdb.OrientVersion(release)
         assert isinstance( x.major, int )
         assert isinstance( x.minor, int )
         assert isinstance( x.build, int )
@@ -98,7 +98,7 @@ class OrientVersionTestCase( unittest.TestCase ):
 
     def test_new_string(self):
         release = "OrientDB Server v2.2.0 (build develop@r79d281140b01c0bc3b566a46a64f1573cb359783; 2016-05-18 14:14:32+0000)"
-        x = pyorient.OrientVersion(release)
+        x = pyorientdb.OrientVersion(release)
         assert isinstance( x.major, int )
         assert isinstance( x.minor, int )
         assert isinstance( x.build, int )
