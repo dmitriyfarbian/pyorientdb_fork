@@ -1,0 +1,44 @@
+[build-system]
+requires = [
+    "poetry-core>=1.0.0",
+    "setuptools>=51.0.0",  # Needed for `pip install`
+    "wheel",
+]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "pyorientdb"
+version = "1.0.0"
+description = "OrientDB native client library"
+authors = ["Bruce Schultz <bschultz013@gmail.com>"]
+maintainers = ["Bruce Schultz <bschultz013@gmail.com>"]
+license = "Apache 2.0"
+
+homepage = "https://github.com/brucetony/pyorientdb"
+#documentation = "https://aop2db.readthedocs.io/en/latest/"
+readme = "README.md"
+
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "License :: OSI Approved :: Apache 2.0 License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3 :: Only",
+]
+packages = [
+    { include = "pyorientdb", from="." },
+]
+
+[tool.poetry.scripts]
+aop2db = "aop2db.cli:main"
+
+[tool.poetry.urls]
+"Issue Tracker" = "https://github.com/brucetony/pyorientdb/issues"
+#"Documentation" = "https://aop2db.readthedocs.io/en/latest/"
+"Source Code" = "https://github.com/brucetony/pyorientdb"
