@@ -1,10 +1,10 @@
-# pyorient OGM
+# pyorientdb OGM
 
 The purpose of an Object-Graph Mapper, OGM for short, is to make interactions with large, complex graph databases more understandable and maintainable.
 
 Similar to an Object-Relational Mapper (ORM) used with relational databases, OGMs bridge a gap between the higher-level object-oriented concepts (classes) in your software and the vertexes and edges in your database.
 
-The pyorient OGM design was heavily inspired by the marvellous SQLAlchemy ORM.
+The pyorientdb OGM design was heavily inspired by the marvellous SQLAlchemy ORM.
 
 ## Overview
 
@@ -18,7 +18,7 @@ Whatever approach you take, once you have built up your dataset, naturally you w
 
 ### Connecting to OrientDB
 
-pyorient splits the process of connecting to your OrientDB server into two steps; specifying where and how to connect, and then actually connecting.
+pyorientdb splits the process of connecting to your OrientDB server into two steps; specifying where and how to connect, and then actually connecting.
 
 For these two steps, you will need to bring in two interfaces
 
@@ -26,7 +26,7 @@ For these two steps, you will need to bring in two interfaces
 from pyorientdb.ogm import Graph, Config
 ```
 
-**Graph** is central to the OGM. It wraps the lower-level pyorient interface **pyorient.OrientDB** and does the job of mapping your python classes to a database schema, and vice versa.
+**Graph** is central to the OGM. It wraps the lower-level pyorientdb interface **pyorient.OrientDB** and does the job of mapping your python classes to a database schema, and vice versa.
 
 To specify which database, and which database schema, **Graph** accepts a configuration. The **Config** _classmethod_, from_url is a convenient way to supply one. Along with a URL, it also requires a username and credential for connecting to the database at that URL.
 

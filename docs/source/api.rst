@@ -3,13 +3,13 @@ developer api
 
 Main client class
 *****************
-.. automodule:: pyorient.constants
+.. automodule:: pyorientdb.constants
     :members:
 
-.. autoclass:: pyorient.OrientDB
+.. autoclass:: pyorientdb.OrientDB
     :inherited-members:
 
-.. autoclass:: pyorient.messages.cluster.Information
+.. autoclass:: pyorientdb.messages.cluster.Information
 
 
 Objects

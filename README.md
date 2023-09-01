@@ -29,7 +29,8 @@ As of OrientDB 3.1+, session tokens are now required for interacting with databa
 of how to use [session tokens below](#persistent-connections---session-token) for older version, but now they are 
 enabled by default when a client is initialized:
 ```python
-client = pyorient.OrientDB("localhost", 2424)
+client = pyorientdb.OrientDB("localhost", 2424)
+client.set_session_token(True)
 client.db_open("GratefulDeadConcerts", "admin", "admin")
 client.command("create class my_class if not exists extends V")
 client.command(f"insert into my_class (row_id, work, holiday) values (1, 'banker', 'christmas')")
@@ -40,7 +41,8 @@ Note that one can connect to a database and run commands and queries within that
 methods will require creating a session ID in order to perform (e.g. checking the existence of a database or creating
 a new one):
 ```python
-client = pyorient.OrientDB("localhost", 2424)
+client = pyorientdb.OrientDB("localhost", 2424)
+client.set_session_token(True)
 client.db_exists("GratefulDeadConcerts")
 # Results in an error: pyorient.exceptions.PyOrientSecurityException: 
 # com.orientechnologies.orient.enterprise.channel.binary.OTokenSecurityException - missing session and token
@@ -49,7 +51,8 @@ client.db_exists("GratefulDeadConcerts")
 To create new databases, or perform other restricted actions, you must connect to the client with approved user 
 credentials:
 ```python
-client = pyorient.OrientDB("localhost", 2424)
+client = pyorientdb.OrientDB("localhost", 2424)
+client.set_session_token(True)
 client.connect("root", "rootPassword")
 client.db_exists("GratefulDeadConcerts")
 # True
@@ -58,23 +61,23 @@ client.db_exists("GratefulDeadConcerts")
 
 ### Init the Client
 ```python
-client = pyorient.OrientDB("localhost", 2424)
+client = pyorientdb.OrientDB("localhost", 2424)
 session_id = client.connect( "admin", "admin" )
 ```
 
 ### Create a DB
 ```python
-client.db_create( db_name, pyorient.DB_TYPE_GRAPH, pyorient.STORAGE_TYPE_MEMORY )
+client.db_create(db_name, pyorientdb.DB_TYPE_GRAPH, pyorientdb.STORAGE_TYPE_MEMORY)
 ```
 
 ### Check if a DB exists
 ```python
-client.db_exists( db_name, pyorient.STORAGE_TYPE_MEMORY )
+client.db_exists(db_name, pyorientdb.STORAGE_TYPE_MEMORY)
 ```
 
 ### Open a DB
 ```python
-client.db_open( db_name, "admin", "admin" )
+client.db_open(db_name, "admin", "admin")
 ```
 
 ### Close a DB and destroy the connection ( by OrientDB design )

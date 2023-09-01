@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# pyorient documentation build configuration file, created by
+# pyorientdb documentation build configuration file, created by
 # sphinx-quickstart on Wed Aug 26 21:27:22 2015.
 #
 # This file is execfile()d with the current directory set to its containing dir.
