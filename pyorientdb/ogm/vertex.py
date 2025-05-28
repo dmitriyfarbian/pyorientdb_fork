@@ -1,6 +1,7 @@
 from .element import GraphElement
 from .broker import VertexBroker
 
+
 class Vertex(GraphElement):
     Broker = VertexBroker
 

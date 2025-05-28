@@ -10,6 +10,9 @@ class VertexCommand(object):
     def __unicode__(self):
         return u'{}'.format(self.command_text)
 
+    def __len__(self):
+        return len(self.command_text)
+
 class CreateEdgeCommand(object):
     def __init__(self, command_text):
         self.command_text = command_text
@@ -23,6 +26,9 @@ class CreateEdgeCommand(object):
             return u'{} RETRY {}'.format(self.command_text, self.retries)
         else:
             return u'{}'.format(self.command_text)
+
+    def __len__(self):
+        return len(self.command_text)
 
     def retry(self, retries):
         self.retries = retries
