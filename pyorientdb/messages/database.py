@@ -375,7 +375,8 @@ class BaseMessage(object):
 
             if isinstance(v, str):
                 v = v.encode('utf-8')
-
+            else:
+                v = str(v).encode('utf-8')
             _content = struct.pack("!i", len(v)) + v
 
         elif t['type'] == STRINGS:
